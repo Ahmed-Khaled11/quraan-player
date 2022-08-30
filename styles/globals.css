@@ -91,6 +91,11 @@
   flex-direction: column;
   align-items: end;
   }
+  @media (max-width:767px) {
+      .surah-info{
+        margin-bottom: 350px;
+      }
+  }
   .surah{
   background-color: #fff;
   width: calc(100% - 100px) ;
