@@ -4,20 +4,34 @@ import {
   PlayFill,
   PauseFill,
   SkipForwardFill,
-} from "react-bootstrap-icons"
-
+  Search,
+  XLg,
+} from "react-bootstrap-icons";
 const Player = () => {
+
   const [data, setData] = useState([]);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const nextSurah =[]
+
+  const [originalData, setOriginalData] = useState([]);
+
+  const [isPlaying, setIsPlaying] = useState([]);
+
+  // array include one item (next surah or preveoseSurah)
+  const nextSurah = [];
+
   // catch surah audio
   const surah = useRef();
 
-  // catch surah text 
+  // catch surah text
   const surahText = useRef();
 
   const allSurahs = useRef();
-  
+
+  const searchBoxBtn = useRef();
+
+  const hideIconSearch = useRef();
+
+  const xBtn = useRef();
+
   useEffect(() => {
     const getSurah = async () => {
       const surah = await fetch("https://quran-endpoint.vercel.app/quran");
@@ -25,30 +39,43 @@ const Player = () => {
     };
     getSurah();
   }, []);
-
   const next = async (next) => {
-      if (Object.keys(data).length) {
-        const filter = data.data.filter(
-          (e) => e.recitation.full === surah.current.src
+    if (Object.keys(data).length) {
+      console.log(Object.keys(data));
+      const filter =
+        data.data.filter((e) => e.recitation.full === surah.current.src) ||
+        isSearching.filter((e) => e.recitation.full === surah.current.src);
+
+      if (filter.length) {
+        const getSurahhh = await fetch(
+          `https://quran-endpoint.vercel.app/quran/${
+            next ? filter[0].number + 1 : filter[0].number - 1
+          }`
         );
-
-        if (filter.length) {
-          const getSurahhh = await fetch(
-            `https://quran-endpoint.vercel.app/quran/${
-              next ? filter[0].number + 1 : filter[0].number - 1
-            }`
-          );
-          nextSurah = await getSurahhh.clone().json();
-
-          if (Object.keys(nextSurah).length) {
-            surahText.current.innerHTML = nextSurah.data.asma.ar.long;
-            surah.current.src = nextSurah.data.recitation.full;
-            surah.current.play();
-            setIsPlaying(true)
-          }
+        nextSurah = await getSurahhh.clone().json();
+        console.log(Object.keys(nextSurah))
+        if (Object.keys(nextSurah).length === 3) {
+          surahText.current.innerHTML = nextSurah.data.asma.ar.long;
+          surah.current.src = nextSurah.data.recitation.full;
+          surah.current.play();
+          setIsPlaying(true);
         }
       }
-    };
+    }
+  };
+  const searchBox = () => {
+    searchBoxBtn.current.classList.add("expend");
+    searchBoxBtn.current.focus();
+    hideIconSearch.current.classList.add("hideIconSearch");
+    xBtn.current.classList.add("show");
+    setOriginalData(data);
+  };
+  const closeSearchBox = () => {
+    searchBoxBtn.current.classList.remove("expend");
+    hideIconSearch.current.classList.remove("hideIconSearch");
+    xBtn.current.classList.remove("show");
+    searchBoxBtn.current.value = "";
+  };
 
   const playAndPause = () => {
     // check if surah is play or pause
@@ -60,28 +87,53 @@ const Player = () => {
       setIsPlaying(!isPlaying);
     }
   };
+
   const surahDetails = (event, e) => {
     surah.current.src = e.recitation.full;
-
     surah.current.play();
+
     setIsPlaying(true);
 
     surahText.current.innerHTML = e.asma.ar.long;
-
     [...allSurahs.current.children].map((e) => e.classList.remove("active"));
     event.target.classList.add("active");
   };
 
-
+  // main serach function 
+  const searchBySurah = (e) => {
+    // update state (data) by text of input search 
+    setData({
+      data: originalData.data.filter(
+        (surah) =>
+          surah.asma.ar.short.toLowerCase().includes(e.target.value.toLowerCase().trim()) ||
+          surah.asma.ar.long.toLowerCase().includes(e.target.value.toLowerCase().trim()) ||
+          surah.asma.en.long.toLowerCase().includes(e.target.value.toLowerCase().trim())
+      ),
+    }); 
+  }
   return (
     <div className="container">
       <div className="quraan-player">
+        <span className="search">
+          <XLg className="x-lg" ref={xBtn} onClick={closeSearchBox} />
+          <Search
+            className="iconSearch"
+            ref={hideIconSearch}
+            onClick={searchBox}
+          />
+          <input
+            type="text"
+            placeholder="Surah Name.."
+            ref={searchBoxBtn}
+            onChange={(e) => searchBySurah(e)}
+          />
+        </span>
         <h1 className="player-info" ref={surahText}>
           .اضغط علي السوره للإستماع إليها <br />
           Click on the surah to listen to it.
         </h1>
         <div className="player">
-          <audio src="" controls ref={surah}></audio>
+          <audio controls ref={surah} src=""></audio>
           <div className="controls">
             <span onClick={() => next(false)}>
               <SkipBackwardFill />
@@ -90,7 +142,6 @@ const Player = () => {
             <span onClick={playAndPause}>
               {isPlaying ? <PauseFill /> : <PlayFill />}
             </span>
-
             <span onClick={() => next(true)}>
               <SkipForwardFill />
             </span>
@@ -98,8 +149,8 @@ const Player = () => {
         </div>
       </div>
       <div className="surah-info" ref={allSurahs}>
-        {data.message === "success" ? (
-          data.data.map((surah, i) => (
+        {data.data ? (
+          data.data.map((surah) => (
             <div
               className="surah"
               key={surah.number}
@@ -111,10 +162,7 @@ const Player = () => {
             </div>
           ))
         ) : (
-          <span className="loading">
-            ...جاري التحميل <br />
-            Loading...
-          </span>
+          <span className="loading">loading..</span>
         )}
       </div>
     </div>
