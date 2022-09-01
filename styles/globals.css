@@ -31,21 +31,22 @@
   margin-right: auto;
   }
   @media (max-width:767px) {
-    .container{
+  .container{
   padding: 0 35px;
-    }
-    
+  }
+
   }
   /* container  */
-/* search */
-.search{
+  /* search */
+  .search{
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
   cursor: pointer;
   height: 50px;
-}
-.search > input{
+  }
+
+  .search > input{
   position: relative;
   display: flex;
   justify-content: end;
@@ -68,30 +69,30 @@
   -moz-border-radius: 14px;
   -ms-border-radius: 14px;
   -o-border-radius: 14px;
-}
-.search>input::placeholder{
+  }
+  .search>input::placeholder{
   text-align: center;
   font-size: 14px;
-}
-.x-lg{
-display:none;
-font-size: 30px;
-}
-.show{
-display: inline-block;
-}
-.expend{
+  }
+  .x-lg{
+  display:none;
+  font-size: 30px;
+  }
+  .show{
+  display: inline-block;
+  }
+  .expend{
   width: 100% !important;
   padding: 12px !important;
   opacity: 1 !important;
-}
-.iconSearch{
+  }
+  .iconSearch{
   font-size: 30px;
-}
-.hideIconSearch{
+  }
+  .hideIconSearch{
   display: none;
-}
-/* search */
+  }
+  /* search */
   /* start player  */
   .quraan-player{
   background-color: #fff ;
@@ -114,15 +115,10 @@ display: inline-block;
   .quraan-player{
   position: fixed;
   left: 0 ;
-  bottom:0;
-  top: 70%;
+  top: 0;
   width: 100%;
   font-size: 10px ;
   padding-bottom: 30px;
-    border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-  border-top-left-radius: 14px;
-  border-top-right-radius: 14px;
   }
 
   }
@@ -163,7 +159,7 @@ display: inline-block;
   }
   @media (max-width:767px) {
   .surah-info{
-  margin-bottom: 300px;
+  margin-top: 300px;
   }
   }
   .surah{
@@ -257,4 +253,22 @@ display: inline-block;
   padding: 16px;
 
   }
-  
+
+
+  [aria-live="polite"]{
+  display: flex !important;
+  flex-direction: column;
+  margin-top: 24px;
+  width: 100% !important;
+
+
+  }
+  [aria-live="polite"] span{
+  width:100% !important;
+  border-radius:       16px  ;
+  -webkit-border-radius:       16px  ;
+  -moz-border-radius:       16px  ;
+  -ms-border-radius:       16px  ;
+  -o-border-radius:       16px  ;
+  };
+

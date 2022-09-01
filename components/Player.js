@@ -7,13 +7,19 @@ import {
   Search,
   XLg,
 } from "react-bootstrap-icons";
-const Player = () => {
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import Loading from "./Loading";
 
+const Player = () => {
+  // main array contains on all data (surahs)
   const [data, setData] = useState([]);
 
-  const [originalData, setOriginalData] = useState([]);
+  // Check if there is syrah playing now
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  const [isPlaying, setIsPlaying] = useState([]);
+  // Array contains on the surah user search on it
+  const [surahFilterd, setSurahFilterd] = useState([]);
 
   // array include one item (next surah or preveoseSurah)
   const nextSurah = [];
@@ -53,7 +59,7 @@ const Player = () => {
           }`
         );
         nextSurah = await getSurahhh.clone().json();
-        console.log(Object.keys(nextSurah))
+        console.log(Object.keys(nextSurah));
         if (Object.keys(nextSurah).length === 3) {
           surahText.current.innerHTML = nextSurah.data.asma.ar.long;
           surah.current.src = nextSurah.data.recitation.full;
@@ -68,7 +74,7 @@ const Player = () => {
     searchBoxBtn.current.focus();
     hideIconSearch.current.classList.add("hideIconSearch");
     xBtn.current.classList.add("show");
-    setOriginalData(data);
+    setSurahFilterd(data);
   };
   const closeSearchBox = () => {
     searchBoxBtn.current.classList.remove("expend");
@@ -99,18 +105,24 @@ const Player = () => {
     event.target.classList.add("active");
   };
 
-  // main serach function 
+  // main serach function
   const searchBySurah = (e) => {
-    // update state (data) by text of input search 
+    // update state (data) by text of input search
     setData({
-      data: originalData.data.filter(
+      data: surahFilterd.data.filter(
         (surah) =>
-          surah.asma.ar.short.toLowerCase().includes(e.target.value.toLowerCase().trim()) ||
-          surah.asma.ar.long.toLowerCase().includes(e.target.value.toLowerCase().trim()) ||
-          surah.asma.en.long.toLowerCase().includes(e.target.value.toLowerCase().trim())
+          surah.asma.ar.short
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase().trim()) ||
+          surah.asma.ar.long
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase().trim()) ||
+          surah.asma.en.long
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase().trim())
       ),
-    }); 
-  }
+    });
+  };
   return (
     <div className="container">
       <div className="quraan-player">
@@ -138,7 +150,6 @@ const Player = () => {
             <span onClick={() => next(false)}>
               <SkipBackwardFill />
             </span>
-
             <span onClick={playAndPause}>
               {isPlaying ? <PauseFill /> : <PlayFill />}
             </span>
@@ -162,7 +173,11 @@ const Player = () => {
             </div>
           ))
         ) : (
-          <span className="loading">loading..</span>
+          <>
+            <Skeleton height={125}></Skeleton>
+            <Skeleton height={125}></Skeleton>
+            <Skeleton height={125}></Skeleton>
+          </>
         )}
       </div>
     </div>
