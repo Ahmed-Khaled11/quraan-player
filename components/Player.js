@@ -80,7 +80,7 @@ const Player = () => {
     searchBoxBtn.current.classList.remove("expend");
     hideIconSearch.current.classList.remove("hideIconSearch");
     xBtn.current.classList.remove("show");
-    searchBoxBtn.current.value
+    searchBoxBtn.current.value = "";
 
   };
 
