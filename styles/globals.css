@@ -254,6 +254,7 @@
 
   }
 
+  /* Skeleton  for loading animation*/
 
   [aria-live="polite"]{
   display: flex !important;
@@ -265,10 +266,10 @@
   }
   [aria-live="polite"] span{
   width:100% !important;
-  border-radius:       16px  ;
-  -webkit-border-radius:       16px  ;
-  -moz-border-radius:       16px  ;
-  -ms-border-radius:       16px  ;
-  -o-border-radius:       16px  ;
+  border-radius:16px;
+  -webkit-border-radius:16px;
+  -moz-border-radius:16px;
+  -ms-border-radius:16px;
+  -o-border-radius:16px;
   };
-
+  /* Skeleton  for loading animation*/

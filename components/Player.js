@@ -173,11 +173,7 @@ const Player = () => {
             </div>
           ))
         ) : (
-          <>
-            <Skeleton height={125}></Skeleton>
-            <Skeleton height={125}></Skeleton>
-            <Skeleton height={125}></Skeleton>
-          </>
+          <Loading />
         )}
       </div>
     </div>
