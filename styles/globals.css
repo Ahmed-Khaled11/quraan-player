@@ -34,17 +34,34 @@
   .container{
   padding: 0 35px;
   }
-
   }
   /* container  */
   /* search */
   .search{
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  cursor: pointer;
-  height: 50px;
-  }
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      background-color: rgb(16, 146, 118);
+      
+      color: #fff;
+      padding: 12px;
+      border-radius: 14px;
+      z-index: 100;
+      cursor: pointer;
+    box-shadow: 3px 3px 18px 3px rgb(27 27 27 / 45%);
+      -webkit-border-radius: 14px;
+      -moz-border-radius: 14px;
+      -ms-border-radius: 14px;
+      -o-border-radius: 14px;
+      transition: 0.6s;
+      -webkit-transition: 0.6s;
+      -moz-transition: 0.6s;
+      -ms-transition: 0.6s;
+      -o-transition: 0.6s;
+}
 
   .search > input{
   position: relative;
@@ -65,11 +82,12 @@
   -moz-transition: 0.6s;
   -ms-transition: 0.6s;
   -o-transition: 0.6s;
-  -webkit-border-radius: 14px;
-  -moz-border-radius: 14px;
-  -ms-border-radius: 14px;
-  -o-border-radius: 14px;
-  }
+  border-radius:14px;
+  -moz-border-radius:14px;
+  -ms-border-radius:14px;
+  -o-border-radius:14px;
+  -webkit-border-radius:14px;
+}
   .search>input::placeholder{
   text-align: center;
   font-size: 14px;
@@ -78,6 +96,9 @@
   display:none;
   font-size: 30px;
   }
+     .search .hideIconSearch .search{
+      background-color: transparent !important;
+     }
   .show{
   display: inline-block;
   }
@@ -136,13 +157,19 @@
   justify-content: space-evenly;
   align-items: center;
   }
+  @media (max-width:767px) {
+      .controls span{
+font-size: 16px
+        }
+    
+  }
   .controls span{
   background-color: #fff;
   color: black;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 28px;
+  font-size: 24px;
   padding: 12px;
   border-radius: 50%;
   -webkit-border-radius: 50%;
@@ -159,7 +186,7 @@
   }
   @media (max-width:767px) {
   .surah-info{
-  margin-top: 300px;
+  margin-top: 250px;
   }
   }
   .surah{

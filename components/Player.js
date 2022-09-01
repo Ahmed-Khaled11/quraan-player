@@ -126,20 +126,6 @@ const Player = () => {
   return (
     <div className="container">
       <div className="quraan-player">
-        <span className="search">
-          <XLg className="x-lg" ref={xBtn} onClick={closeSearchBox} />
-          <Search
-            className="iconSearch"
-            ref={hideIconSearch}
-            onClick={searchBox}
-          />
-          <input
-            type="text"
-            placeholder="Surah Name.."
-            ref={searchBoxBtn}
-            onChange={(e) => searchBySurah(e)}
-          />
-        </span>
         <h1 className="player-info" ref={surahText}>
           .اضغط علي السوره للإستماع إليها <br />
           Click on the surah to listen to it.
@@ -159,6 +145,20 @@ const Player = () => {
           </div>
         </div>
       </div>
+      <span className="search">
+        <XLg className="x-lg" ref={xBtn} onClick={closeSearchBox} />
+        <Search
+          className="iconSearch"
+          ref={hideIconSearch}
+          onClick={searchBox}
+        />
+        <input
+          type="text"
+          placeholder="Surah Name.."
+          ref={searchBoxBtn}
+          onChange={(e) => searchBySurah(e)}
+        />
+      </span>
       <div className="surah-info" ref={allSurahs}>
         {data.data ? (
           data.data.map((surah) => (
