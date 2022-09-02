@@ -1,8 +1,12 @@
+  :root{
+  --main-color:rgb(5, 148, 192);
+  }
   html,
   body {
   padding: 0;
   margin: 0;
   font-family: 'Cairo', sans-serif;
+
   }
 
   a {
@@ -38,37 +42,40 @@
   /* container  */
   /* search */
   .search{
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      display: flex;
-      flex-direction: row-reverse;
-      align-items: center;
-      background-color: rgb(16, 146, 118);
-      
-      color: #fff;
-      padding: 12px;
-      border-radius: 14px;
-      z-index: 100;
-      cursor: pointer;
-    box-shadow: 3px 3px 18px 3px rgb(27 27 27 / 45%);
-      -webkit-border-radius: 14px;
-      -moz-border-radius: 14px;
-      -ms-border-radius: 14px;
-      -o-border-radius: 14px;
-      transition: 0.6s;
-      -webkit-transition: 0.6s;
-      -moz-transition: 0.6s;
-      -ms-transition: 0.6s;
-      -o-transition: 0.6s;
-}
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  background-color: var(--main-color);
+  width: 54px;
+  color: #fff;
+  padding: 12px;
+  border-radius: 14px;
+  z-index: 100;
+  cursor: pointer;
+  box-shadow: 3px 3px 18px 3px rgb(27 27 27 / 45%);
+  -webkit-border-radius: 14px;
+  -moz-border-radius: 14px;
+  -ms-border-radius: 14px;
+  -o-border-radius: 14px;
+  transition: 0.3s;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  -o-transition: 0.3s;
+  }
 
+  .search.search-expend{
+  width: 317px;
+  }
   .search > input{
   position: relative;
   display: flex;
   justify-content: end;
   background-color: #fff;
-  color:rgb(16, 146, 118);
+  color:var(--main-color);
   font-size: 18px;
   font-weight: bold;
   width: 0;
@@ -77,17 +84,22 @@
   outline: none;
   border: none;
   border-radius: 14px;
-  transition: 0.6s;
-  -webkit-transition: 0.6s;
-  -moz-transition: 0.6s;
-  -ms-transition: 0.6s;
-  -o-transition: 0.6s;
+  transition: 0.3s;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  -o-transition: 0.3s;
   border-radius:14px;
   -moz-border-radius:14px;
   -ms-border-radius:14px;
   -o-border-radius:14px;
   -webkit-border-radius:14px;
-}
+  }
+  .search>input.expend {
+  width: 100% !important;
+  padding: 12px !important;
+  opacity: 1 !important;
+  }
   .search>input::placeholder{
   text-align: center;
   font-size: 14px;
@@ -96,23 +108,18 @@
   display:none;
   font-size: 30px;
   }
-     .search .hideIconSearch .search{
-      background-color: transparent !important;
-     }
   .show{
   display: inline-block;
   }
-  .expend{
-  width: 100% !important;
-  padding: 12px !important;
-  opacity: 1 !important;
+  .hideIconSearch {
+  display: none;
+  opacity: 0;
   }
+
   .iconSearch{
   font-size: 30px;
   }
-  .hideIconSearch{
-  display: none;
-  }
+
   /* search */
   /* start player  */
   .quraan-player{
@@ -123,7 +130,8 @@
   padding: 16px;
   font-weight: bold;
   background: rgb(11, 161, 155);
-  background: linear-gradient(90deg, rgba(11, 161, 155, 1) 0%, rgba(0, 97, 80, 1) 100%);
+  background: rgb(2, 160, 161);
+  background: linear-gradient(90deg, var(--main-color) 0%, rgba(3, 194, 209, 1) 95%);
   box-shadow: 3px 3px 18px 3px rgb(27 27 27 / 45%);
   border-bottom-left-radius: 14px;
   border-bottom-right-radius: 14px;
@@ -158,10 +166,10 @@
   align-items: center;
   }
   @media (max-width:767px) {
-      .controls span{
-font-size: 16px
-        }
-    
+  .controls span{
+  font-size: 16px
+  }
+
   }
   .controls span{
   background-color: #fff;
@@ -214,7 +222,7 @@ font-size: 16px
   -o-transition: 0.3s;
   }
   .surah.active{
-  background-color: rgb(16, 146, 118);
+  background-color: var(--main-color);
   color: #fff;
   }
   .surah::after{
@@ -251,7 +259,7 @@ font-size: 16px
   top: 50%;
   transform: translateY(-50%);
   border-left-color: transparent;
-  border-right-color: rgb(16, 146, 118);
+  border-right-color: var(--main-color);
   border-bottom-color: transparent;
   border-top-color: transparent;
   -webkit-transform: translateY(-50%);
@@ -261,7 +269,7 @@ font-size: 16px
   }
   .surah:hover,
   .surah:hover.surah::after{
-  background-color: rgb(16, 146, 118);
+  background-color: var(--main-color);
   color: #fff;
   }
   @media (max-width:767px) {
@@ -274,7 +282,7 @@ font-size: 16px
   display: block;
   width: 100%;
   margin-top: 16px;
-  background-color:rgb(16, 146, 118) ;
+  background-color:var(--main-color) ;
   font-size: 28px;
   text-align: center;
   padding: 16px;
