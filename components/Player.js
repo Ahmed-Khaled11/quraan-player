@@ -41,7 +41,7 @@ const Player = () => {
   useEffect(() => {
     const getSurah = async () => {
       const surah = await fetch("https://quran-endpoint.vercel.app/quran");
-      setData(await surah.json()), setTempData(data.data);
+      setData(await surah.json());
     };
     getSurah();
   }, []);
@@ -81,7 +81,6 @@ const Player = () => {
     xBtn.current.classList.remove("show");
     searchBoxBtn.current.value = "";
     searchContainer.current.classList.remove("search-expend");
-    
     returnTempData();
   };
   const playAndPause = () => {
@@ -99,7 +98,6 @@ const Player = () => {
     surahAudio.current.src = e.recitation.full;
     surahAudio.current.play();
     setIsPlaying(true);
-    setTempData({data: data/data})
     surahTextHeader.current.innerHTML = e.asma.ar.long;
     [...allSurahs.current.children].map((e) => e.classList.remove("active"));
     event.target.classList.add("active");
@@ -111,7 +109,7 @@ const Player = () => {
       searchBoxBtn.current.value === "" ||
       searchBoxBtn.current.value === null
     ) {
-
+      setData({data: tempData.data})
     }
   };
   // main serach function
