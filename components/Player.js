@@ -33,7 +33,7 @@ const Player = () => {
   const searchBoxBtn = useRef();
 
   const hideIconSearch = useRef();
-  
+
   const searchContainer = useRef();
 
   const xBtn = useRef();
@@ -80,13 +80,7 @@ const Player = () => {
     hideIconSearch.current.classList.remove("hideIconSearch");
     xBtn.current.classList.remove("show");
     searchBoxBtn.current.value = "";
-<<<<<<< HEAD
         searchContainer.current.classList.remove("search-expend");
-=======
-
-  };
->>>>>>> cd729826e18dfbd11eed29299eb04c9f67f5a164
-
     returnTempData();
   };
   const playAndPause = () => {
