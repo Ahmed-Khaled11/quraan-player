@@ -23,16 +23,17 @@ const Player = () => {
   const nextSurah = [];
 
   // catch surah audio
-  const surah = useRef();
+  const surahAudio = useRef();
 
-  // catch surah text
-  const surahText = useRef();
+  // catch surah text of Header
+  const surahTextHeader = useRef();
+  
 
   const allSurahs = useRef();
 
   const searchBoxBtn = useRef();
 
-  const hideIconSearch = useRef();
+  const iconSearch = useRef();
 
   const searchContainer = useRef();
 
@@ -40,27 +41,27 @@ const Player = () => {
   useEffect(() => {
     const getSurah = async () => {
       const surah = await fetch("https://quran-endpoint.vercel.app/quran");
-      setData(await surah.json());
+      setData(await surah.json()), setTempData(data.data);
     };
     getSurah();
   }, []);
+
   const nextOrPrevSurah = async (nextOrPrevSurah) => {
     if (Object.keys(data).length) {
-      const filter =
-        data.data.filter((e) => e.recitation.full === surah.current.src) ||
-        isSearching.filter((e) => e.recitation.full === surah.current.src);
-
+      const filter = data.data.filter(
+        (e) => e.recitation.full === surahAudio.current.src
+      );
       if (filter.length) {
         const getSurahhh = await fetch(
           `https://quran-endpoint.vercel.app/quran/${
-            next ? filter[0].number + 1 : filter[0].number - 1
+            nextOrPrevSurah ? filter[0].number + 1 : filter[0].number - 1
           }`
         );
         nextSurah = await getSurahhh.clone().json();
         if (Object.keys(nextSurah).length === 3) {
-          surahText.current.innerHTML = nextSurah.data.asma.ar.long;
-          surah.current.src = nextSurah.data.recitation.full;
-          surah.current.play();
+          surahTextHeader.current.innerHTML = nextSurah.data.asma.ar.long;
+          surahAudio.current.src = nextSurah.data.recitation.full;
+          surahAudio.current.play();
           setIsPlaying(true);
         }
       }
@@ -69,36 +70,37 @@ const Player = () => {
   const searchBox = () => {
     searchBoxBtn.current.classList.add("expend");
     searchBoxBtn.current.focus();
-    hideIconSearch.current.classList.add("hideIconSearch");
+    iconSearch.current.classList.add("hideIconSearch");
     xBtn.current.classList.add("show");
     searchContainer.current.classList.add("search-expend");
-
     setTempData(data);
   };
   const closeSearchBox = () => {
     searchBoxBtn.current.classList.remove("expend");
-    hideIconSearch.current.classList.remove("hideIconSearch");
+    iconSearch.current.classList.remove("hideIconSearch");
     xBtn.current.classList.remove("show");
     searchBoxBtn.current.value = "";
-        searchContainer.current.classList.remove("search-expend");
+    searchContainer.current.classList.remove("search-expend");
+    
     returnTempData();
   };
   const playAndPause = () => {
     // check if surah is play or pause
     if (isPlaying) {
-      surah.current.pause();
+      surahAudio.current.pause();
       setIsPlaying(!isPlaying);
     } else {
-      surah.current.play();
+      surahAudio.current.play();
       setIsPlaying(!isPlaying);
     }
   };
 
   const surahDetails = (event, e) => {
-    surah.current.src = e.recitation.full;
-    surah.current.play();
+    surahAudio.current.src = e.recitation.full;
+    surahAudio.current.play();
     setIsPlaying(true);
-    surahText.current.innerHTML = e.asma.ar.long;
+    setTempData({data: data/data})
+    surahTextHeader.current.innerHTML = e.asma.ar.long;
     [...allSurahs.current.children].map((e) => e.classList.remove("active"));
     event.target.classList.add("active");
   };
@@ -109,7 +111,7 @@ const Player = () => {
       searchBoxBtn.current.value === "" ||
       searchBoxBtn.current.value === null
     ) {
-      setData({ data: tempData.data });
+
     }
   };
   // main serach function
@@ -135,12 +137,12 @@ const Player = () => {
   return (
     <div className="container">
       <div className="quraan-player">
-        <h1 className="player-info" ref={surahText}>
+        <h1 className="player-info" ref={surahTextHeader}>
           .اضغط علي السوره للإستماع إليها <br />
           Click on the surah to listen to it.
         </h1>
         <div className="player">
-          <audio controls ref={surah} src=""></audio>
+          <audio controls ref={surahAudio} src=""></audio>
           <div className="controls">
             <span onClick={() => nextOrPrevSurah(false)}>
               <SkipBackwardFill />
@@ -158,7 +160,7 @@ const Player = () => {
         <XLg className="x-lg" ref={xBtn} onClick={closeSearchBox} />
         <Search
           className="iconSearch"
-          ref={hideIconSearch}
+          ref={iconSearch}
           onClick={searchBox}
         />
         <input
@@ -179,6 +181,7 @@ const Player = () => {
               <span>{surah.asma.ar.short}</span>
               <br />
               <span>{surah.asma.en.short}</span>
+              <span className="surah-number">{surah.number}</span>
             </div>
           ))
         ) : (
