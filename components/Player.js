@@ -6,6 +6,7 @@ import {
   SkipForwardFill,
   Search,
   XLg,
+  DashLg,
 } from "react-bootstrap-icons";
 import Loading from "./Loading";
 
@@ -19,6 +20,8 @@ const Player = () => {
   // Array contains temp data to return it later (when user search of surah)
   const [tempData, setTempData] = useState([]);
 
+  const [showSearch, setShowSearch] = useState(false);
+
   // array include one item (next surah or preveoseSurah)
   const nextSurah = [];
 
@@ -28,7 +31,6 @@ const Player = () => {
   // catch surah text of Header
   const surahTextHeader = useRef();
   
-
   const allSurahs = useRef();
 
   const searchBoxBtn = useRef();
@@ -42,6 +44,8 @@ const Player = () => {
     const getSurah = async () => {
       const surah = await fetch("https://quran-endpoint.vercel.app/quran");
       setData(await surah.json());
+      //update value (true) to show serach button
+      setShowSearch(true);
     };
     getSurah();
   }, []);
@@ -129,7 +133,6 @@ const Player = () => {
             .includes(e.target.value.toLowerCase().trim())
       ),
     });
-
     returnTempData();
   };
   return (
@@ -154,7 +157,8 @@ const Player = () => {
           </div>
         </div>
       </div>
-      <span className="search" ref={searchContainer}>
+      {showSearch ?
+        <span className="search" ref={searchContainer}>
         <XLg className="x-lg" ref={xBtn} onClick={closeSearchBox} />
         <Search
           className="iconSearch"
@@ -167,7 +171,7 @@ const Player = () => {
           ref={searchBoxBtn}
           onChange={(e) => searchBySurah(e)}
         />
-      </span>
+      </span>: ''}
       <div className="surah-info" ref={allSurahs}>
         {data.data ? (
           data.data.map((surah) => (
