@@ -18,7 +18,6 @@ const Player = () => {
   // Array contains temp data to return it later (when user search of surah)
   const [tempData, setTempData] = useState([]);
 
-  const [showSearch, setShowSearch] = useState(false);
 
   // array include one item (next surah or preveoseSurah)
   const nextSurah = [];
@@ -44,8 +43,6 @@ const Player = () => {
       const tempData = await fetch("https://quran-endpoint.vercel.app/quran");
       if (!data.length) {
         setData(await data.json());
-        //update value (true) when page render and fetch data,  to show serach button
-        setShowSearch(true);
       }
       if (!tempData.length) {
         setTempData(await tempData.json());
@@ -58,7 +55,6 @@ const Player = () => {
       const filter = tempData.data.filter(
         (e) => e.recitation.full === surahAudio.current.src
       );
-      console.log(filter)
       if (filter.length) {
         const surahFilterd = await fetch(
           `https://quran-endpoint.vercel.app/quran/${
@@ -161,7 +157,7 @@ const Player = () => {
           </div>
         </div>
       </div>
-      {showSearch ? (
+      {Object.keys(data).length > 0 ? (
         <span className="search" ref={searchContainer}>
           <XLg className="x-lg" ref={xBtn} onClick={closeSearchBox} />
           <Search className="iconSearch" ref={iconSearch} onClick={searchBox} />
