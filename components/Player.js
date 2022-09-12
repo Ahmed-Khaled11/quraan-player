@@ -6,7 +6,6 @@ import {
   SkipForwardFill,
   Search,
   XLg,
-  DashLg,
 } from "react-bootstrap-icons";
 import Loading from "./Loading";
 
@@ -25,12 +24,14 @@ const Player = () => {
   // array include one item (next surah or preveoseSurah)
   const nextSurah = [];
 
+  // const theTempData = useRef();
+
   // catch surah audio
   const surahAudio = useRef();
 
   // catch surah text of Header
   const surahTextHeader = useRef();
-  
+
   const allSurahs = useRef();
 
   const searchBoxBtn = useRef();
@@ -40,29 +41,37 @@ const Player = () => {
   const searchContainer = useRef();
 
   const xBtn = useRef();
+
   useEffect(() => {
     const getSurah = async () => {
-      const surah = await fetch("https://quran-endpoint.vercel.app/quran");
-      setData(await surah.json());
-      //update value (true) to show serach button
-      setShowSearch(true);
+      const data = await fetch("https://quran-endpoint.vercel.app/quran");
+      const tempData = await fetch("https://quran-endpoint.vercel.app/quran");
+      if (!data.length) {
+        setData(await data.json());
+        setShowSearch(true);
+      }
+      if (!tempData.length) {
+        setTempData(await tempData.json());
+        
+      }
+      //update value (true) when page render and fetch data,  to show serach button
     };
     getSurah();
   }, []);
-
   const nextOrPrevSurah = async (nextOrPrevSurah) => {
-    if (Object.keys(data).length) {
-      const filter = data.data.filter(
+    if (data.data || tempData.data) {
+      const filter = tempData.data.filter(
         (e) => e.recitation.full === surahAudio.current.src
       );
+      console.log(filter)
       if (filter.length) {
-        const getSurahhh = await fetch(
+        const surahFilterd = await fetch(
           `https://quran-endpoint.vercel.app/quran/${
             nextOrPrevSurah ? filter[0].number + 1 : filter[0].number - 1
           }`
         );
-        nextSurah = await getSurahhh.clone().json();
-        if (Object.keys(nextSurah).length === 3) {
+        nextSurah = await surahFilterd.clone().json();
+        if (nextSurah.message !== "error") {
           surahTextHeader.current.innerHTML = nextSurah.data.asma.ar.long;
           surahAudio.current.src = nextSurah.data.recitation.full;
           surahAudio.current.play();
@@ -78,6 +87,7 @@ const Player = () => {
     xBtn.current.classList.add("show");
     searchContainer.current.classList.add("search-expend");
     setTempData(data);
+    // theTempData.current = data.data;
   };
   const closeSearchBox = () => {
     searchBoxBtn.current.classList.remove("expend");
@@ -113,7 +123,7 @@ const Player = () => {
       searchBoxBtn.current.value === "" ||
       searchBoxBtn.current.value === null
     ) {
-      setData({data: tempData.data})
+      setData({ data: tempData.data });
     }
   };
   // main serach function
@@ -149,7 +159,7 @@ const Player = () => {
               <SkipBackwardFill />
             </span>
             <span onClick={playAndPause}>
-              {isPlaying ? <PauseFill /> : <PlayFill />}
+              {isPlaying ? <PauseFill /> : <PlayFill className="play" />}
             </span>
             <span onClick={() => nextOrPrevSurah(true)}>
               <SkipForwardFill />
@@ -157,21 +167,20 @@ const Player = () => {
           </div>
         </div>
       </div>
-      {showSearch ?
+      {showSearch ? (
         <span className="search" ref={searchContainer}>
-        <XLg className="x-lg" ref={xBtn} onClick={closeSearchBox} />
-        <Search
-          className="iconSearch"
-          ref={iconSearch}
-          onClick={searchBox}
-        />
-        <input
-          type="text"
-          placeholder="Surah Name.."
-          ref={searchBoxBtn}
-          onChange={(e) => searchBySurah(e)}
-        />
-      </span>: ''}
+          <XLg className="x-lg" ref={xBtn} onClick={closeSearchBox} />
+          <Search className="iconSearch" ref={iconSearch} onClick={searchBox} />
+          <input
+            type="text"
+            placeholder="Surah Name.."
+            ref={searchBoxBtn}
+            onChange={(e) => searchBySurah(e)}
+          />
+        </span>
+      ) : (
+        ""
+      )}
       <div className="surah-info" ref={allSurahs}>
         {data.data ? (
           data.data.map((surah) => (
