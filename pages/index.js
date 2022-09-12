@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-page-custom-font */
 /* eslint-disable react/no-unknown-property */
 import Head from 'next/head'
+import { Suspense } from 'react';
+import Loading from '../components/Loading';
 import Player from '../components/Player'
 
 export default function Home() {
@@ -17,7 +19,9 @@ export default function Home() {
           href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&display=swap"
         />
       </Head>
-      <Player />
+      <Suspense fallback={<Loading />}>
+        <Player />
+      </Suspense>
     </div>
   );
 }
