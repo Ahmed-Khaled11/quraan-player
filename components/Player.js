@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, memo } from "react";
 import {
   SkipBackwardFill,
   PlayFill,
@@ -8,7 +8,6 @@ import {
   XLg,
 } from "react-bootstrap-icons";
 import Loading from "./Loading";
-
 const Player = () => {
   // main array contains on all data (surahs)
   const [data, setData] = useState([]);
@@ -23,8 +22,6 @@ const Player = () => {
 
   // array include one item (next surah or preveoseSurah)
   const nextSurah = [];
-
-  // const theTempData = useRef();
 
   // catch surah audio
   const surahAudio = useRef();
@@ -41,20 +38,18 @@ const Player = () => {
   const searchContainer = useRef();
 
   const xBtn = useRef();
-
   useEffect(() => {
     const getSurah = async () => {
       const data = await fetch("https://quran-endpoint.vercel.app/quran");
       const tempData = await fetch("https://quran-endpoint.vercel.app/quran");
       if (!data.length) {
         setData(await data.json());
+        //update value (true) when page render and fetch data,  to show serach button
         setShowSearch(true);
       }
       if (!tempData.length) {
         setTempData(await tempData.json());
-        
       }
-      //update value (true) when page render and fetch data,  to show serach button
     };
     getSurah();
   }, []);
@@ -87,7 +82,6 @@ const Player = () => {
     xBtn.current.classList.add("show");
     searchContainer.current.classList.add("search-expend");
     setTempData(data);
-    // theTempData.current = data.data;
   };
   const closeSearchBox = () => {
     searchBoxBtn.current.classList.remove("expend");
@@ -203,4 +197,4 @@ const Player = () => {
   );
 };
 
-export default Player;
+export default memo(Player);
