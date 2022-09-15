@@ -9,6 +9,7 @@ import {
 } from "react-bootstrap-icons";
 import Loading from "./Loading";
 const Player = () => {
+  
   // main array contains on all data (surahs)
   const [data, setData] = useState([]);
 
@@ -18,7 +19,6 @@ const Player = () => {
   // Array contains temp data to return it later (when user search of surah)
   const [tempData, setTempData] = useState([]);
 
-
   // array include one item (next surah or preveoseSurah)
   const nextSurah = [];
 
@@ -26,7 +26,7 @@ const Player = () => {
   const surahAudio = useRef();
 
   // catch surah text of Header
-  const surahTextHeader = useRef();
+  const surahTitle = useRef();
 
   const allSurahs = useRef();
 
@@ -38,7 +38,7 @@ const Player = () => {
 
   const xBtn = useRef();
   useEffect(() => {
-    const getSurah = async () => {
+    const getData = async () => {
       const data = await fetch("https://quran-endpoint.vercel.app/quran");
       const tempData = await fetch("https://quran-endpoint.vercel.app/quran");
       if (!data.length) {
@@ -48,7 +48,7 @@ const Player = () => {
         setTempData(await tempData.json());
       }
     };
-    getSurah();
+    getData();
   }, []);
   const nextOrPrevSurah = async (nextOrPrevSurah) => {
     if (data.data || tempData.data) {
@@ -63,7 +63,7 @@ const Player = () => {
         );
         nextSurah = await surahFilterd.clone().json();
         if (nextSurah.message !== "error") {
-          surahTextHeader.current.innerHTML = nextSurah.data.asma.ar.long;
+          surahTitle.current.innerHTML = nextSurah.data.asma.ar.long;
           surahAudio.current.src = nextSurah.data.recitation.full;
           surahAudio.current.play();
           setIsPlaying(true);
@@ -71,13 +71,13 @@ const Player = () => {
       }
     }
   };
+  
   const searchBox = () => {
     searchBoxBtn.current.classList.add("expend");
     searchBoxBtn.current.focus();
     iconSearch.current.classList.add("hideIconSearch");
     xBtn.current.classList.add("show");
     searchContainer.current.classList.add("search-expend");
-    setTempData(data);
   };
   const closeSearchBox = () => {
     searchBoxBtn.current.classList.remove("expend");
@@ -98,16 +98,20 @@ const Player = () => {
     }
   };
 
+
   const surahDetails = (event, e) => {
+    // add src audio and play the surah 
     surahAudio.current.src = e.recitation.full;
     surahAudio.current.play();
     setIsPlaying(true);
-    surahTextHeader.current.innerHTML = e.asma.ar.long;
+    surahTitle.current.innerHTML = e.asma.ar.long;
+    // remove class active from all surahs 
     [...allSurahs.current.children].map((e) => e.classList.remove("active"));
+    // add class active to surah user clicked on it
     event.target.classList.add("active");
   };
 
-  // keep all data in temp value when user search for surah
+  //keep original data in temp value to re use it 
   const returnTempData = () => {
     if (
       searchBoxBtn.current.value === "" ||
@@ -133,12 +137,12 @@ const Player = () => {
             .includes(e.target.value.toLowerCase().trim())
       ),
     });
-    returnTempData();
   };
   return (
     <div className="container">
+    
       <div className="quraan-player">
-        <h1 className="player-info" ref={surahTextHeader}>
+        <h1 className="player-info" ref={surahTitle}>
           .اضغط علي السوره للإستماع إليها <br />
           Click on the surah to listen to it.
         </h1>
