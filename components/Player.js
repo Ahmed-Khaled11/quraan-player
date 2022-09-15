@@ -9,7 +9,6 @@ import {
 } from "react-bootstrap-icons";
 import Loading from "./Loading";
 const Player = () => {
-  
   // main array contains on all data (surahs)
   const [data, setData] = useState([]);
 
@@ -62,6 +61,16 @@ const Player = () => {
           }`
         );
         nextSurah = await surahFilterd.clone().json();
+        // remove class active from all surahs
+        [...allSurahs.current.children].map((e) =>
+          e.classList.remove("active")
+        );
+        // add class active to next surah 
+        if (nextSurah.data && [...allSurahs.current.children].length === 114) {
+          allSurahs.current.children[nextSurah.data.number - 1].classList.add(
+            "active"
+          );
+        }
         if (nextSurah.message !== "error") {
           surahTitle.current.innerHTML = nextSurah.data.asma.ar.long;
           surahAudio.current.src = nextSurah.data.recitation.full;
@@ -71,7 +80,7 @@ const Player = () => {
       }
     }
   };
-  
+
   const searchBox = () => {
     searchBoxBtn.current.classList.add("expend");
     searchBoxBtn.current.focus();
@@ -98,20 +107,19 @@ const Player = () => {
     }
   };
 
-
   const surahDetails = (event, e) => {
-    // add src audio and play the surah 
+    // add src audio and play the surah
     surahAudio.current.src = e.recitation.full;
     surahAudio.current.play();
     setIsPlaying(true);
     surahTitle.current.innerHTML = e.asma.ar.long;
-    // remove class active from all surahs 
+    // remove class active from all surahs
     [...allSurahs.current.children].map((e) => e.classList.remove("active"));
     // add class active to surah user clicked on it
     event.target.classList.add("active");
   };
 
-  //keep original data in temp value to re use it 
+  //keep original data in temp value to re use it
   const returnTempData = () => {
     if (
       searchBoxBtn.current.value === "" ||
@@ -140,7 +148,6 @@ const Player = () => {
   };
   return (
     <div className="container">
-    
       <div className="quraan-player">
         <h1 className="player-info" ref={surahTitle}>
           .اضغط علي السوره للإستماع إليها <br />
