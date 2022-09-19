@@ -76,7 +76,7 @@ const Player = () => {
     updateNextSurah();
   };
 
-  const updateNextSurah = async (updateNextSurah) => {
+  const updateNextSurah = async () => {
     if (data.data || tempData.data) {
       const filter = tempData.data.filter(
         (e) => e.recitation.full === surahAudio.current.audio.current.src
@@ -94,11 +94,27 @@ const Player = () => {
   };
 
   const surahEnded = () => {
-    surahAudio.current.audio.current.src = nextSurah.recitation.full;
-    surahTitle.current.innerHTML = nextSurah.asma.ar.long;
-    surahAudio.current.audio.current.play();
-    updateNextSurah()
-  };
+    if (surahTitle.current.innerHTML !== "سورة الناس") {
+          surahAudio.current.audio.current.src = nextSurah.recitation.full;
+          surahTitle.current.innerHTML = nextSurah.asma.ar.long;
+          surahAudio.current.audio.current.play();
+          // remove class active from all surahs
+          [...allSurahs.current.children].map((e) =>
+            e.classList.remove("active")
+          );
+          // add class active to next surah
+          if (nextSurah && [...allSurahs.current.children].length === 114) {
+            allSurahs.current.children[nextSurah.number - 1].classList.add(
+              "active"
+            );
+          }
+    if (nextSurah || nextSurah !== "undefined") {
+      updateNextSurah();
+    } 
+    }
+
+
+  }
   //keep original data in temp value to re use it
   const returnTempData = () => {
     if (
@@ -137,7 +153,7 @@ const Player = () => {
           <AudioPlayer
             ref={surahAudio}
             src="https://download.quranicaudio.com/quran/ahmed_ibn_3ali_al-3ajamy/001.mp3"
-            onEnded={surahEnded}
+            onEnded={(e)=> surahEnded(e)}
             // other props here
           />
         </div>
