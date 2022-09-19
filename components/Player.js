@@ -8,18 +8,16 @@ import {
   XLg,
 } from "react-bootstrap-icons";
 import Loading from "./Loading";
+import AudioPlayer from "react-h5-audio-player";
+import "react-h5-audio-player/lib/styles.css";
 const Player = () => {
   // main array contains on all data (surahs)
   const [data, setData] = useState([]);
 
-  // Check if there is syrah playing now
-  const [isPlaying, setIsPlaying] = useState(false);
-
   // Array contains temp data to return it later (when user search of surah)
   const [tempData, setTempData] = useState([]);
 
-  // array include one item (next surah or preveoseSurah)
-  const nextSurah = [];
+  const [nextSurah, setNextSurah] = useState(null);
 
   // catch surah audio
   const surahAudio = useRef();
@@ -49,37 +47,6 @@ const Player = () => {
     };
     getData();
   }, []);
-  const nextOrPrevSurah = async (nextOrPrevSurah) => {
-    if (data.data || tempData.data) {
-      const filter = tempData.data.filter(
-        (e) => e.recitation.full === surahAudio.current.src
-      );
-      if (filter.length) {
-        const surahFilterd = await fetch(
-          `https://quran-endpoint.vercel.app/quran/${
-            nextOrPrevSurah ? filter[0].number + 1 : filter[0].number - 1
-          }`
-        );
-        nextSurah = await surahFilterd.clone().json();
-        // remove class active from all surahs
-        [...allSurahs.current.children].map((e) =>
-          e.classList.remove("active")
-        );
-        // add class active to next surah 
-        if (nextSurah.data && [...allSurahs.current.children].length === 114) {
-          allSurahs.current.children[nextSurah.data.number - 1].classList.add(
-            "active"
-          );
-        }
-        if (nextSurah.message !== "error") {
-          surahTitle.current.innerHTML = nextSurah.data.asma.ar.long;
-          surahAudio.current.src = nextSurah.data.recitation.full;
-          surahAudio.current.play();
-          setIsPlaying(true);
-        }
-      }
-    }
-  };
 
   const searchBox = () => {
     searchBoxBtn.current.classList.add("expend");
@@ -96,29 +63,42 @@ const Player = () => {
     searchContainer.current.classList.remove("search-expend");
     returnTempData();
   };
-  const playAndPause = () => {
-    // check if surah is play or pause
-    if (isPlaying) {
-      surahAudio.current.pause();
-      setIsPlaying(!isPlaying);
-    } else {
-      surahAudio.current.play();
-      setIsPlaying(!isPlaying);
-    }
-  };
 
   const surahDetails = (event, e) => {
     // add src audio and play the surah
-    surahAudio.current.src = e.recitation.full;
-    surahAudio.current.play();
-    setIsPlaying(true);
+    surahAudio.current.audio.current.src = e.recitation.full;
+    surahAudio.current.audio.current.play();
     surahTitle.current.innerHTML = e.asma.ar.long;
     // remove class active from all surahs
     [...allSurahs.current.children].map((e) => e.classList.remove("active"));
     // add class active to surah user clicked on it
     event.target.classList.add("active");
+    updateNextSurah();
   };
 
+  const updateNextSurah = async (updateNextSurah) => {
+    if (data.data || tempData.data) {
+      const filter = tempData.data.filter(
+        (e) => e.recitation.full === surahAudio.current.audio.current.src
+      );
+      if (filter.length) {
+        const surahFilterd = await fetch(
+          `https://quran-endpoint.vercel.app/quran/${filter[0].number + 1}`
+        );
+
+        const nextSurah = await surahFilterd.clone().json();
+        // remove class active from all surahs
+        setNextSurah(nextSurah.data);
+      }
+    }
+  };
+
+  const surahEnded = () => {
+    surahAudio.current.audio.current.src = nextSurah.recitation.full;
+    surahTitle.current.innerHTML = nextSurah.asma.ar.long;
+    surahAudio.current.audio.current.play();
+    updateNextSurah()
+  };
   //keep original data in temp value to re use it
   const returnTempData = () => {
     if (
@@ -154,18 +134,12 @@ const Player = () => {
           Click on the surah to listen to it.
         </h1>
         <div className="player">
-          <audio controls ref={surahAudio} src=""></audio>
-          <div className="controls">
-            <span onClick={() => nextOrPrevSurah(false)}>
-              <SkipBackwardFill />
-            </span>
-            <span onClick={playAndPause}>
-              {isPlaying ? <PauseFill /> : <PlayFill className="play" />}
-            </span>
-            <span onClick={() => nextOrPrevSurah(true)}>
-              <SkipForwardFill />
-            </span>
-          </div>
+          <AudioPlayer
+            ref={surahAudio}
+            src="https://download.quranicaudio.com/quran/ahmed_ibn_3ali_al-3ajamy/001.mp3"
+            onEnded={surahEnded}
+            // other props here
+          />
         </div>
       </div>
       {Object.keys(data).length > 0 ? (
