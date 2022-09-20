@@ -97,16 +97,15 @@ const Player = () => {
     if (surahTitle.current.innerHTML !== "سورة الناس") {
           surahAudio.current.audio.current.src = nextSurah.recitation.full;
           surahTitle.current.innerHTML = nextSurah.asma.ar.long;
-          surahAudio.current.audio.current.play();
           // remove class active from all surahs
           [...allSurahs.current.children].map((e) =>
-            e.classList.remove("active")
-          );
+            e.classList.remove("active"));
           // add class active to next surah
           if (nextSurah && [...allSurahs.current.children].length === 114) {
             allSurahs.current.children[nextSurah.number - 1].classList.add(
               "active"
             );
+            surahAudio.current.audio.current.play();
           }
     if (nextSurah || nextSurah !== "undefined") {
       updateNextSurah();
