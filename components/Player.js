@@ -151,7 +151,7 @@ const Player = () => {
         <div className="player">
           <AudioPlayer
             ref={surahAudio}
-            src="https://download.quranicaudio.com/quran/ahmed_ibn_3ali_al-3ajamy/001.mp3"
+            src=""
             onEnded={(e)=> surahEnded(e)}
             // other props here
           />
