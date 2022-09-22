@@ -85,14 +85,12 @@ const Player = () => {
         const surahFilterd = await fetch(
           `https://quran-endpoint.vercel.app/quran/${filter[0].number + 1}`
         );
-
         const nextSurah = await surahFilterd.clone().json();
         // remove class active from all surahs
         setNextSurah(nextSurah.data);
       }
     }
   };
-
   const surahEnded = () => {
     if (surahTitle.current.innerHTML !== "سورة الناس") {
           surahAudio.current.audio.current.src = nextSurah.recitation.full;
@@ -111,8 +109,6 @@ const Player = () => {
       updateNextSurah();
     } 
     }
-
-
   }
   //keep original data in temp value to re use it
   const returnTempData = () => {

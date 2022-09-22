@@ -143,7 +143,7 @@
   }
   }
   .player>div{
-     border-radius: 24px;
+  border-radius: 24px;
   box-shadow: none;
   -webkit-border-radius: 24px;
   -moz-border-radius: 24px;
@@ -162,9 +162,8 @@
   -moz-border-radius: 6px;
   -ms-border-radius: 6px;
   -o-border-radius: 6px;
-}
   }
-
+  }
   .player div,
   .player button{
   color: var(--main-color);
@@ -283,3 +282,10 @@
   -o-border-radius:16px;
   };
   /* Skeleton  for loading animation*/
+  .rhap_volume-indicator{
+  box-shadow: rgb(27 27 27 / 50%) 1px 2px 4px 1px !important;
+  }
+  .rhap_volume-indicator{
+  background-color: var(--main-color) !important;
+  } 
+
